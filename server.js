@@ -44,13 +44,21 @@ const startServer = async () => {
 
   console.log("E: Starting Express...");
 
-  app.listen(port, () => {
-    console.log(`F: Server is running on port ${port}!`);
-  });
+  // Run the server locally
+  if (process.env.NODE_ENV !== "production") {
+    app.listen(port, () => {
+      console.log(`F: Server is running on port ${port}!`);
+    });
+  }
 };
 
-startServer();
+// Execute the local environment function
+if (process.env.NODE_ENV !== "production") {
+  startServer();
+} else {
+  connectDB().catch((err) =>
+    console.error("DB Connection failed:", err.message),
+  );
+}
 
-// app.listen(3000, () => {
-//   console.log("Server is running on port 3000");
-// });
+module.exports = app;
